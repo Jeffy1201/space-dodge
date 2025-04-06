@@ -1,3 +1,5 @@
 # space-dodge
 
-to play the game you have to copy this: https://github.com/Jeffy1201/space-dodge.git from the
+to play the game you have to copy this: https://github.com/Jeffy1201/space-dodge.git from the https when you press the code button,
+then go to terminal and put in git clone https://github.com/Jeffy1201/space-dodge.git once you have done that you can put in
+cd space-dodge then to play put in python3 space/ dodge.
