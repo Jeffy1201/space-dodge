@@ -25,9 +25,9 @@ if os.path.exists("ChatGPT Image Apr 7, 2025, 04_43_50 PM.png"):
 
 # Load top image if available (will use as top bar)
 top_img = None
-if os.path.exists("ChatGPT Image Apr 7, 2025, 03_09_17 PM.png"):  # Replace with the actual image path
-    top_img = pygame.image.load("ChatGPT Image Apr 7, 2025, 03_09_17 PM.png").convert()
-    top_img = pygame.transform.scale(top_img, (WIDTH - 300, 100))  # Resize to fit the top
+if os.path.exists("5f463070803a0d0004146b6e.png"):  # Replace with the actual image path
+    top_img = pygame.image.load("5f463070803a0d0004146b6e.png").convert_alpha()
+    top_img = pygame.transform.scale(top_img, (WIDTH - 300, 200))  # Resize to fit the top
 
 # Position the image slightly below the top
 top_x = (WIDTH - (WIDTH - 300)) // 2  # Center it horizontally
@@ -83,6 +83,13 @@ while running:
         coin_text = font.render(f"Coins: {coins}", True, BLACK)
         screen.blit(coin_text, (20, 20))
 
+    # Draw the auto-clicker price and count
+    auto_clicker_text = font.render(f"Auto Clickers: {auto_clickers}", True, BLACK)
+    screen.blit(auto_clicker_text, (20, HEIGHT - 333))
+
+    auto_clicker_text = font.render (f"Cost: {auto_clicker_cost})", True, BLACK)
+    screen.blit(auto_clicker_text, (20, HEIGHT - 313))
+
     # Draw text for click button (invisible box)
     click_text = font.render("Click", True, BLACK)
     screen.blit(click_text, (click_button.centerx - click_text.get_width() // 2, click_button.centery - click_text.get_height() // 2))
@@ -104,10 +111,10 @@ while running:
                 if coins >= auto_clicker_cost:
                     coins -= auto_clicker_cost
                     auto_clickers += 1
-                    auto_clicker_cost = int(auto_clicker_cost * 1.5)
+                    auto_clicker_cost = int(auto_clicker_cost * 1.5)  # Increase the cost for the next auto-clicker
 
         elif event.type == PASSIVE_EVENT:
-            coins += auto_clickers
+            coins += auto_clickers  # Add coins based on the number of auto-clickers
 
     clock.tick(60)
 
