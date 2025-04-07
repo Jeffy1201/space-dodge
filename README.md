@@ -19,3 +19,11 @@ python3 space-dodge/Space\ Doge.py
 ```bash
 python3 space-dodge/Space\ Game.py
 ```
+### Testing
+```bash
+python3 testing\ games.py
+```
+### Funny
+```bash
+python3 Funny.py
+```
