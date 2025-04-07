@@ -5,131 +5,90 @@ import random
 # Initialize Pygame
 pygame.init()
 
-# Screen setup
+# Screen dimensions
 WIDTH, HEIGHT = 800, 600
+
+# Create the game window
 Win = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("hehe haha: The Gameening")
 
-# Fonts
+# Font
 Font = pygame.font.SysFont('comicsans', 30)
 BigFont = pygame.font.SysFont('comicsans', 50)
 
-# Colors
-COLORS = [
-    (255, 0, 0), (0, 255, 0),
-    (0, 255, 255), (255, 255, 0),
-    (255, 0, 255), (255, 255, 255)
-]
+# Funny colors
+COLORS = [(255, 0, 0), (0, 255, 0), (0, 255, 255), (255, 255, 0), (255, 0, 255)]
 
-class Game:
-    def __init__(self):
-        self.screen = "start"
-        self.waiting_for_enter = False
+def draw_start_screen():
+    Win.fill((0, 0, 0))
+    title = BigFont.render("Welcome to: hehe haha", True, random.choice(COLORS))
+    instruction = Font.render("Press ENTER to yeet into the game", True, (255, 255, 255))
+    Win.blit(title, (WIDTH//2 - title.get_width()//2, HEIGHT//2 - 50))
+    Win.blit(instruction, (WIDTH//2 - instruction.get_width()//2, HEIGHT//2 + 20))
+    pygame.display.update()
+    wait_for_enter()
 
-    def wait_for_enter(self):
-        """Set waiting state to True."""
-        print(f"Waiting for ENTER. Current screen: {self.screen}")
-        self.waiting_for_enter = True
+def dramatic_loading_screen():
+    Win.fill((0, 0, 0))
+    loading = Font.render("Loading... probably...", True, random.choice(COLORS))
+    Win.blit(loading, (WIDTH//2 - loading.get_width()//2, HEIGHT//2))
+    pygame.display.update()
+    pygame.time.delay(1500)
 
-    def draw_start_screen(self):
-        Win.fill((0, 0, 0))
-        title = BigFont.render("Welcome to: hehe haha", True, random.choice(COLORS))
-        instruction = Font.render("Press ENTER to yeet into the game", True, (255, 255, 255))
-        Win.blit(title, (WIDTH // 2 - title.get_width() // 2, HEIGHT // 2 - 50))
-        Win.blit(instruction, (WIDTH // 2 - instruction.get_width() // 2, HEIGHT // 2 + 30))
-        pygame.display.update()
-        self.wait_for_enter()
+def random_fact_screen():
+    facts = [
+        "Did you know? Ducks have regional accents.",
+        "Fun Fact: Bananas are berries, but strawberries aren't.",
+        "This game was made by a committee of raccoons.",
+        "You're doing amazing, sweetie.",
+        "Fact: This is the best game ever. No bias."
+    ]
+    Win.fill((0, 0, 0))
+    fact = random.choice(facts)
+    fact_text = Font.render(fact, True, (255, 255, 255))
+    Win.blit(fact_text, (WIDTH//2 - fact_text.get_width()//2, HEIGHT//2))
+    pygame.display.update()
+    pygame.time.delay(2500)
 
-    def dramatic_loading_screen(self):
-        Win.fill((0, 0, 0))
-        loading = Font.render("Loading... probably...", True, random.choice(COLORS))
-        Win.blit(loading, (WIDTH // 2 - loading.get_width() // 2, HEIGHT // 2 - 20))
-        prompt = Font.render("Press ENTER to continue", True, (200, 200, 200))
-        Win.blit(prompt, (WIDTH // 2 - prompt.get_width() // 2, HEIGHT // 2 + 20))
-        pygame.display.update()
-        self.wait_for_enter()
+def display_good_boy():
+    Win.fill((0, 0, 0))
+    msg = BigFont.render("Good Boy!!", True, random.choice(COLORS))
+    Win.blit(msg, (WIDTH//2 - msg.get_width()//2, HEIGHT//2))
+    pygame.display.update()
+    pygame.time.delay(2000)
 
-    def random_fact_screen(self):
-        facts = [
-            "Did you know? Ducks have regional accents.",
-            "Bananas are berries. Strawberries are imposters.",
-            "Game certified 100% bug-free (not legally binding).",
-            "You're cooler than a polar bear's toenails.",
-            "Raccoons helped make this game. Probably."
-        ]
-        fact = random.choice(facts)
-        Win.fill((0, 0, 0))
-        fact_text = Font.render(fact, True, (255, 255, 255))
-        Win.blit(fact_text, (WIDTH // 2 - fact_text.get_width() // 2, HEIGHT // 2 - 20))
-        prompt = Font.render("Press ENTER to continue", True, (200, 200, 200))
-        Win.blit(prompt, (WIDTH // 2 - prompt.get_width() // 2, HEIGHT // 2 + 20))
-        pygame.display.update()
-        self.wait_for_enter()
+def end_screen():
+    Win.fill((0, 0, 0))
+    msg = Font.render("Game Over... or is it?", True, (255, 255, 255))
+    prompt = Font.render("Press ESC to quit, or ENTER to do it all again.", True, (200, 200, 200))
+    Win.blit(msg, (WIDTH//2 - msg.get_width()//2, HEIGHT//2 - 20))
+    Win.blit(prompt, (WIDTH//2 - prompt.get_width()//2, HEIGHT//2 + 20))
+    pygame.display.update()
 
-    def display_good_boy(self):
-        Win.fill((0, 0, 0))
-        msg = BigFont.render("GOOD BOY!! ", True, random.choice(COLORS))
-        Win.blit(msg, (WIDTH // 2 - msg.get_width() // 2, HEIGHT // 2 - 20))
-        prompt = Font.render("Press ENTER to continue", True, (200, 200, 200))
-        Win.blit(prompt, (WIDTH // 2 - prompt.get_width() // 2, HEIGHT // 2 + 20))
-        pygame.display.update()
-        self.wait_for_enter()
-
-    def end_screen(self):
-        Win.fill((0, 0, 0))
-        msg = Font.render("Game Over... or is it?", True, (255, 255, 255))
-        prompt = Font.render("Press ESC to quit, or ENTER to do it all again.", True, (200, 200, 200))
-        Win.blit(msg, (WIDTH // 2 - msg.get_width() // 2, HEIGHT // 2 - 20))
-        Win.blit(prompt, (WIDTH // 2 - prompt.get_width() // 2, HEIGHT // 2 + 20))
-        pygame.display.update()
-        self.wait_for_enter()
-
-    def handle_events(self):
+    while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit(); sys.exit()
-
             if event.type == pygame.KEYDOWN:
-                print(f"Key pressed: {event.key}, waiting_for_enter: {self.waiting_for_enter}, screen: {self.screen}")
-                if event.key == pygame.K_RETURN and self.waiting_for_enter:
-                    self.waiting_for_enter = False
-                    print(f"ENTER pressed. waiting_for_enter set to {self.waiting_for_enter}")
-                elif event.key == pygame.K_RETURN and not self.waiting_for_enter:
-                    if self.screen == "start":
-                        self.screen = "loading"
-                    elif self.screen == "loading":
-                        self.screen = "fact"
-                    elif self.screen == "fact":
-                        self.screen = "good_boy"
-                    elif self.screen == "good_boy":
-                        self.screen = "end"
-                    elif self.screen == "end":
-                        self.screen = "start"
-                    print(f"Screen changed to {self.screen}")
-                if event.key == pygame.K_ESCAPE and self.screen == "end":
+                if event.key == pygame.K_ESCAPE:
                     pygame.quit(); sys.exit()
+                if event.key == pygame.K_RETURN:
+                    main()
 
-    def update(self):
-        if not self.waiting_for_enter:
-            print(f"Updating screen: {self.screen}")
-            if self.screen == "start":
-                self.draw_start_screen()
-            elif self.screen == "loading":
-                self.dramatic_loading_screen()
-            elif self.screen == "fact":
-                self.random_fact_screen()
-            elif self.screen == "good_boy":
-                self.display_good_boy()
-            elif self.screen == "end":
-                self.end_screen()
+def wait_for_enter():
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit(); sys.exit()
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
+                return
 
-    def run(self):
-        clock = pygame.time.Clock()
-        while True:
-            self.handle_events()
-            self.update()
-            clock.tick(60)
+def main():
+    draw_start_screen()
+    dramatic_loading_screen()
+    random_fact_screen()
+    display_good_boy()
+    end_screen()
 
 if __name__ == "__main__":
-    game = Game()
-    game.run()
+    main()
