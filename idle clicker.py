@@ -24,8 +24,8 @@ if os.path.exists("buy_button.png"):
 
 # Try loading clicker image
 click_img = None
-if os.path.exists("pngtree-cookie-clipart-cartoon-clipart-cookie-png-image_2360129.jpg"):
-    click_img = pygame.image.load("pngtree-cookie-clipart-cartoon-clipart-cookie-png-image_2360129.jpg")
+if os.path.exists("ChatGPT Image Apr 7, 2025, 03_09_17 PM.png"):
+    click_img = pygame.image.load("ChatGPT Image Apr 7, 2025, 03_09_17 PM.png")
     click_img = pygame.transform.scale(click_img, (100, 100))
 
 # Button rectangles
