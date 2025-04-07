@@ -10,7 +10,7 @@ To install the game, run the following commands in your terminal:
 mkdir space-dodge && cd space-dodge && git clone https://github.com/Jeffy1201/space-dodge.git . && pip3 install pygame
 ```
 ## How do I run the games?
-To run any of the games, use one of these::
+To run any of the games, use one of these:
 ### Space Dodge
 ```bash
 python3 space-dodge/Space\ Doge.py
