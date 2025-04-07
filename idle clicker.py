@@ -16,6 +16,12 @@ coins = 0
 auto_clickers = 0
 auto_clicker_cost = 10
 
+# Load background image if available
+background_img = None
+if os.path.exists("background.png"):
+    background_img = pygame.image.load("background.png").convert()
+    background_img = pygame.transform.scale(background_img, (WIDTH, HEIGHT))
+
 # Try loading buy button image
 buy_img = None
 if os.path.exists("buy_button.png"):
@@ -30,16 +36,13 @@ if os.path.exists("clicker.png"):
 
 # Try loading coin image
 coin_img = None
-if os.path.exists("pngimg.com - coin_PNG36871.png"):
-    coin_img = pygame.image.load("pngimg.com - coin_PNG36871.png").convert_alpha()
+if os.path.exists("coin.png"):
+    coin_img = pygame.image.load("coin.png").convert_alpha()
     coin_img = pygame.transform.scale(coin_img, (24, 24))
 
 # Button rectangles
 click_button = pygame.Rect(WIDTH // 2 - 50, 100, 100, 100)
-if buy_img:
-    buy_button = buy_img.get_rect(center=(WIDTH // 2, 225))
-else:
-    buy_button = pygame.Rect(WIDTH // 2 - 150, 200, 300, 50)
+buy_button = pygame.Rect(WIDTH // 2 - 150, 200, 300, 50)
 
 clock = pygame.time.Clock()
 
@@ -49,19 +52,22 @@ pygame.time.set_timer(PASSIVE_EVENT, 1000)
 
 running = True
 while running:
-    screen.fill(WHITE)
+    if background_img:
+        screen.blit(background_img, (0, 0))
+    else:
+        screen.fill(WHITE)
 
     # Draw clicker image or fallback square
     if click_img:
         screen.blit(click_img, click_button)
     else:
-        pygame.draw.rect(screen, (200, 100, 100), click_button)  # Reddish square
+        pygame.draw.rect(screen, (0, 100, 255), click_button)  # Blue box
 
     # Draw buy button (image or fallback rectangle)
     if buy_img:
         screen.blit(buy_img, buy_button)
     else:
-        pygame.draw.rect(screen, (100, 150, 255), buy_button)
+        pygame.draw.rect(screen, (0, 100, 255), buy_button)  # Blue box
 
     # Draw coin image and value
     if coin_img:
@@ -72,14 +78,12 @@ while running:
         coin_text = font.render(f"Coins: {coins}", True, BLACK)
         screen.blit(coin_text, (20, 20))
 
-    auto_text = font.render(f"Auto Clickers: {auto_clickers}", True, BLACK)
-    screen.blit(auto_text, (20, 60))
+    # Add text to blue boxes
+    click_text = font.render("Click", True, WHITE)
+    screen.blit(click_text, (click_button.centerx - click_text.get_width() // 2, click_button.centery - click_text.get_height() // 2))
 
-    click_text = font.render("Click Me!", True, BLACK)
-    screen.blit(click_text, (click_button.x + 10, click_button.y + 35))
-
-    buy_text = font.render(f"Buy Auto Clicker ({auto_clicker_cost})", True, BLACK)
-    screen.blit(buy_text, (buy_button.x + 30, buy_button.y + 10))
+    buy_text = font.render("Buy Auto Clicker", True, WHITE)
+    screen.blit(buy_text, (buy_button.centerx - buy_text.get_width() // 2, buy_button.centery - buy_text.get_height() // 2))
 
     pygame.display.flip()
 
