@@ -7,6 +7,7 @@ pygame.init()
 WIDTH, HEIGHT = 500, 400
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
+RED = (255, 0, 0)
 
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Idle Clicker Game")
@@ -18,9 +19,19 @@ auto_clicker_cost = 10
 
 # Load background image if available
 background_img = None
-if os.path.exists("background.png"):
-    background_img = pygame.image.load("background.png").convert()
+if os.path.exists("ChatGPT Image Apr 7, 2025, 04_43_50 PM.png"):
+    background_img = pygame.image.load("ChatGPT Image Apr 7, 2025, 04_43_50 PM.png").convert()
     background_img = pygame.transform.scale(background_img, (WIDTH, HEIGHT))
+
+# Load top image if available (will use as top bar)
+top_img = None
+if os.path.exists("ChatGPT Image Apr 7, 2025, 03_09_17 PM.png"):  # Replace with the actual image path
+    top_img = pygame.image.load("ChatGPT Image Apr 7, 2025, 03_09_17 PM.png").convert()
+    top_img = pygame.transform.scale(top_img, (WIDTH - 300, 100))  # Resize to fit the top
+
+# Position the image slightly below the top
+top_x = (WIDTH - (WIDTH - 300)) // 2  # Center it horizontally
+top_y = 20  # Move the image 20 pixels down from the top
 
 # Try loading buy button image
 buy_img = None
@@ -36,13 +47,13 @@ if os.path.exists("clicker.png"):
 
 # Try loading coin image
 coin_img = None
-if os.path.exists("coin.png"):
-    coin_img = pygame.image.load("coin.png").convert_alpha()
+if os.path.exists("pngimg.com - coin_PNG36871.png"):
+    coin_img = pygame.image.load("pngimg.com - coin_PNG36871.png").convert_alpha()
     coin_img = pygame.transform.scale(coin_img, (24, 24))
 
-# Button rectangles
-click_button = pygame.Rect(WIDTH // 2 - 50, 100, 100, 100)
-buy_button = pygame.Rect(WIDTH // 2 - 150, 200, 300, 50)
+# Button rectangles (positioning buttons at the bottom)
+click_button = pygame.Rect(WIDTH // 2 - 50, HEIGHT - 180, 100, 50)  # Proper height for click button
+buy_button = pygame.Rect(WIDTH // 2 - 150, HEIGHT - 100, 300, 50)    # Proper height for buy button
 
 clock = pygame.time.Clock()
 
@@ -57,17 +68,11 @@ while running:
     else:
         screen.fill(WHITE)
 
-    # Draw clicker image or fallback square
-    if click_img:
-        screen.blit(click_img, click_button)
+    # Draw the top image (or a red square if the image is not available)
+    if top_img:
+        screen.blit(top_img, (top_x, top_y))  # Position it slightly below the top
     else:
-        pygame.draw.rect(screen, (0, 100, 255), click_button)  # Blue box
-
-    # Draw buy button (image or fallback rectangle)
-    if buy_img:
-        screen.blit(buy_img, buy_button)
-    else:
-        pygame.draw.rect(screen, (0, 100, 255), buy_button)  # Blue box
+        pygame.draw.rect(screen, RED, pygame.Rect(0, 0, WIDTH, 50))  # Red square fallback
 
     # Draw coin image and value
     if coin_img:
@@ -78,11 +83,12 @@ while running:
         coin_text = font.render(f"Coins: {coins}", True, BLACK)
         screen.blit(coin_text, (20, 20))
 
-    # Add text to blue boxes
-    click_text = font.render("Click", True, WHITE)
+    # Draw text for click button (invisible box)
+    click_text = font.render("Click", True, BLACK)
     screen.blit(click_text, (click_button.centerx - click_text.get_width() // 2, click_button.centery - click_text.get_height() // 2))
 
-    buy_text = font.render("Buy Auto Clicker", True, WHITE)
+    # Draw text for buy button (invisible box)
+    buy_text = font.render("Buy Auto Clicker", True, BLACK)
     screen.blit(buy_text, (buy_button.centerx - buy_text.get_width() // 2, buy_button.centery - buy_text.get_height() // 2))
 
     pygame.display.flip()
