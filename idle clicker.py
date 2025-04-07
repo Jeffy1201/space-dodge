@@ -4,7 +4,15 @@ import os
 
 pygame.init()
 
-WIDTH, HEIGHT = 500, 400
+WIDTH, HEIGHT = 700, 550
+pygame.display.set_mode((WIDTH, HEIGHT))
+pygame.display.set_caption("Idle Clicker Game")
+# Initialize the font
+font = pygame.font.SysFont("Arial", 24)
+small_font = pygame.font.SysFont("Arial", 18)
+# Initialize the clock
+clock = pygame.time.Clock()
+# Colors    
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 RED = (255, 0, 0)
@@ -16,7 +24,7 @@ small_font = pygame.font.SysFont("Arial", 18)
 
 coins = 0
 auto_clickers = 0
-auto_clicker_cost = 10
+auto_clicker_cost = 10  # Reduced base cost
 fullscreen = False
 
 # Load background image if available
@@ -50,8 +58,9 @@ if os.path.exists("pngimg.com - coin_PNG36871.png"):
     coin_img = pygame.transform.scale(coin_img, (24, 24))
 
 # Button rectangles (positioning buttons at the bottom)
-click_button = pygame.Rect(WIDTH // 2 - 50, HEIGHT - 180, 100, 50)  # Proper height for click button
-buy_button = pygame.Rect(WIDTH // 2 - 50, HEIGHT - 100, 100, 50)    # Proper height for buy button
+click_button = pygame.Rect(WIDTH // 2 - 50, HEIGHT - 235, 100, 50)  # Proper height for click button
+buy_button = pygame.Rect(WIDTH // 2 - 50, HEIGHT - 132, 100, 50)    # Proper height for buy button
+sell_button = pygame.Rect(WIDTH // 2 - 50, HEIGHT - 60, 100, 50)    # Button for selling auto-clickers
 menu_button = pygame.Rect(WIDTH - 50, 10, 40, 40)                   # Menu button in the top right corner
 
 # Buttons for buying different amounts
@@ -76,8 +85,11 @@ def calculate_cost(quantity):
     cost = auto_clicker_cost
     for _ in range(quantity):
         total_cost += cost
-        cost = int(cost * 1.5)
+        cost = int(cost * 1.1)  # Reduced cost increment factor
     return total_cost
+
+def calculate_sell_price():
+    return auto_clicker_cost // 2  # Selling auto-clickers at half the current purchase cost
 
 running = True
 while running:
@@ -116,6 +128,10 @@ while running:
     buy_text = font.render("Buy", True, BLACK)
     screen.blit(buy_text, (buy_button.centerx - buy_text.get_width() // 2, buy_button.centery - buy_text.get_height() // 2))
 
+    # Draw sell button
+    sell_text = font.render("Sell", True, BLACK)
+    screen.blit(sell_text, (sell_button.centerx - sell_text.get_width() // 2, sell_button.centery - sell_text.get_height() // 2))
+
     if show_buy_options:
         # Draw text for buying different amounts and their costs
         buy_1_text = small_font.render(f"1 ({calculate_cost(1)} coins)", True, BLACK)
@@ -149,6 +165,10 @@ while running:
                 coins += 1
             elif buy_button.collidepoint(event.pos):
                 show_buy_options = not show_buy_options
+            elif sell_button.collidepoint(event.pos):
+                if auto_clickers > 0:
+                    auto_clickers -= 1
+                    coins += calculate_sell_price()
             elif menu_button.collidepoint(event.pos):
                 show_menu = not show_menu  # Toggle the menu
                 if not show_menu:
@@ -158,26 +178,26 @@ while running:
                     if coins >= calculate_cost(1):
                         coins -= calculate_cost(1)
                         auto_clickers += 1
-                        auto_clicker_cost = int(auto_clicker_cost * 1.5)
+                        auto_clicker_cost = int(auto_clicker_cost * 1.2)  # Reduced cost increment factor
                 elif buy_5_button.collidepoint(event.pos):
                     if coins >= calculate_cost(5):
                         coins -= calculate_cost(5)
                         auto_clickers += 5
                         for _ in range(5):
-                            auto_clicker_cost = int(auto_clicker_cost * 1.5)
+                            auto_clicker_cost = int(auto_clicker_cost * 1.2)  # Reduced cost increment factor
                 elif buy_10_button.collidepoint(event.pos):
                     if coins >= calculate_cost(10):
                         coins -= calculate_cost(10)
                         auto_clickers += 10
                         for _ in range(10):
-                            auto_clicker_cost = int(auto_clicker_cost * 1.5)
+                            auto_clicker_cost = int(auto_clicker_cost * 1.2)  # Reduced cost increment factor
                 elif buy_max_button.collidepoint(event.pos):
                     max_clickers = 0
                     while coins >= auto_clicker_cost:
                         coins -= auto_clicker_cost
                         auto_clickers += 1
                         max_clickers += 1
-                        auto_clicker_cost = int(auto_clicker_cost * 1.5)
+                        auto_clicker_cost = int(auto_clicker_cost * 1.2)  # Reduced cost increment factor
                     buy_max_cost = calculate_cost(max_clickers)
 
         elif event.type == pygame.KEYDOWN:
