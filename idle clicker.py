@@ -24,9 +24,15 @@ if os.path.exists("buy_button.png"):
 
 # Try loading clicker image with transparency support
 click_img = None
-if os.path.exists("ChatGPT Image Apr 7, 2025, 03_09_17 PM.png"):
-    click_img = pygame.image.load("ChatGPT Image Apr 7, 2025, 03_09_17 PM.png").convert_alpha()
+if os.path.exists("clicker.png"):
+    click_img = pygame.image.load("clicker.png").convert_alpha()
     click_img = pygame.transform.scale(click_img, (100, 100))
+
+# Try loading coin image
+coin_img = None
+if os.path.exists("pngimg.com - coin_PNG36871.png"):
+    coin_img = pygame.image.load("pngimg.com - coin_PNG36871.png").convert_alpha()
+    coin_img = pygame.transform.scale(coin_img, (24, 24))
 
 # Button rectangles
 click_button = pygame.Rect(WIDTH // 2 - 50, 100, 100, 100)
@@ -57,9 +63,14 @@ while running:
     else:
         pygame.draw.rect(screen, (100, 150, 255), buy_button)
 
-    # Draw text
-    coin_text = font.render(f"Coins: {coins}", True, BLACK)
-    screen.blit(coin_text, (20, 20))
+    # Draw coin image and value
+    if coin_img:
+        screen.blit(coin_img, (20, 20))
+        coin_text = font.render(f"x {coins}", True, BLACK)
+        screen.blit(coin_text, (50, 20))
+    else:
+        coin_text = font.render(f"Coins: {coins}", True, BLACK)
+        screen.blit(coin_text, (20, 20))
 
     auto_text = font.render(f"Auto Clickers: {auto_clickers}", True, BLACK)
     screen.blit(auto_text, (20, 60))
