@@ -27,11 +27,11 @@ if os.path.exists("ChatGPT Image Apr 7, 2025, 04_43_50 PM.png"):
 top_img = None
 if os.path.exists("5f463070803a0d0004146b6e.png"):  # Replace with the actual image path
     top_img = pygame.image.load("5f463070803a0d0004146b6e.png").convert_alpha()
-    top_img = pygame.transform.scale(top_img, (WIDTH - 300, 200))  # Resize to fit the top
+    top_img = pygame.transform.scale(top_img, (WIDTH - 400, 100))  # Resize to fit the top
 
 # Position the image slightly below the top
-top_x = (WIDTH - (WIDTH - 300)) // 2  # Center it horizontally
-top_y = 20  # Move the image 20 pixels down from the top
+top_x = WIDTH // 2 + 150 # Center it horizontally
+top_y = 10  # Move the image 20 pixels down from the top
 
 # Try loading buy button image
 buy_img = None
@@ -55,11 +55,25 @@ if os.path.exists("pngimg.com - coin_PNG36871.png"):
 click_button = pygame.Rect(WIDTH // 2 - 50, HEIGHT - 180, 100, 50)  # Proper height for click button
 buy_button = pygame.Rect(WIDTH // 2 - 150, HEIGHT - 100, 300, 50)    # Proper height for buy button
 
+# Buttons for buying different amounts
+buy_1_button = pygame.Rect(20, HEIGHT - 220, 160, 50)
+buy_5_button = pygame.Rect(140, HEIGHT - 220, 530, 50)
+buy_10_button = pygame.Rect(260, HEIGHT - 270, 160, 50)
+buy_max_button = pygame.Rect(380, HEIGHT - 270, -550, 50)
+
 clock = pygame.time.Clock()
 
 # Passive income event
 PASSIVE_EVENT = pygame.USEREVENT + 1
 pygame.time.set_timer(PASSIVE_EVENT, 1000)
+
+def calculate_cost(quantity):
+    total_cost = 0
+    cost = auto_clicker_cost
+    for _ in range(quantity):
+        total_cost += cost
+        cost = int(cost * 1.5)
+    return total_cost
 
 running = True
 while running:
@@ -87,7 +101,7 @@ while running:
     auto_clicker_text = font.render(f"Auto Clickers: {auto_clickers}", True, BLACK)
     screen.blit(auto_clicker_text, (20, HEIGHT - 333))
 
-    auto_clicker_text = font.render (f"Cost: {auto_clicker_cost})", True, BLACK)
+    auto_clicker_text = font.render(f"Cost: {auto_clicker_cost}", True, BLACK)
     screen.blit(auto_clicker_text, (20, HEIGHT - 313))
 
     # Draw text for click button (invisible box)
@@ -97,6 +111,20 @@ while running:
     # Draw text for buy button (invisible box)
     buy_text = font.render("Buy Auto Clicker", True, BLACK)
     screen.blit(buy_text, (buy_button.centerx - buy_text.get_width() // 2, buy_button.centery - buy_text.get_height() // 2))
+
+    # Draw text for buying different amounts and their costs
+    buy_1_text = font.render(f"1 ({calculate_cost(1)} coins)", True, BLACK)
+    screen.blit(buy_1_text, (buy_1_button.centerx - buy_1_text.get_width() // 2, buy_1_button.centery - buy_1_text.get_height() // 2))
+
+    buy_5_text = font.render(f"5 ({calculate_cost(5)} coins)", True, BLACK)
+    screen.blit(buy_5_text, (buy_5_button.centerx - buy_5_text.get_width() // 2, buy_5_button.centery - buy_5_text.get_height() // 2))
+
+    buy_10_text = font.render(f"10 ({calculate_cost(10)} coins)", True, BLACK)
+    screen.blit(buy_10_text, (buy_10_button.centerx - buy_10_text.get_width() // 2, buy_10_button.centery - buy_10_text.get_height() // 2))
+
+    buy_max_cost = calculate_cost(auto_clickers + (coins // auto_clicker_cost))  # Calculate max cost based on available coins
+    buy_max_text = font.render(f"Max ({buy_max_cost} coins)", True, BLACK)
+    screen.blit(buy_max_text, (buy_max_button.centerx - buy_max_text.get_width() // 2, buy_max_button.centery - buy_max_text.get_height() // 2))
 
     pygame.display.flip()
 
@@ -112,6 +140,31 @@ while running:
                     coins -= auto_clicker_cost
                     auto_clickers += 1
                     auto_clicker_cost = int(auto_clicker_cost * 1.5)  # Increase the cost for the next auto-clicker
+            elif buy_1_button.collidepoint(event.pos):
+                if coins >= calculate_cost(1):
+                    coins -= calculate_cost(1)
+                    auto_clickers += 1
+                    auto_clicker_cost = int(auto_clicker_cost * 1.5)
+            elif buy_5_button.collidepoint(event.pos):
+                if coins >= calculate_cost(5):
+                    coins -= calculate_cost(5)
+                    auto_clickers += 5
+                    for _ in range(5):
+                        auto_clicker_cost = int(auto_clicker_cost * 1.5)
+            elif buy_10_button.collidepoint(event.pos):
+                if coins >= calculate_cost(10):
+                    coins -= calculate_cost(10)
+                    auto_clickers += 10
+                    for _ in range(10):
+                        auto_clicker_cost = int(auto_clicker_cost * 1.5)
+            elif buy_max_button.collidepoint(event.pos):
+                max_clickers = 0
+                while coins >= auto_clicker_cost:
+                    coins -= auto_clicker_cost
+                    auto_clickers += 1
+                    max_clickers += 1
+                    auto_clicker_cost = int(auto_clicker_cost * 1.5)
+                buy_max_cost = calculate_cost(max_clickers)
 
         elif event.type == PASSIVE_EVENT:
             coins += auto_clickers  # Add coins based on the number of auto-clickers
