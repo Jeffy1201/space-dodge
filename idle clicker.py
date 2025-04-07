@@ -22,8 +22,14 @@ if os.path.exists("buy_button.png"):
     buy_img = pygame.image.load("buy_button.png")
     buy_img = pygame.transform.scale(buy_img, (300, 50))
 
-# Use a square for the click button
-click_button = pygame.Rect(WIDTH // 2 - 50, 100, 100, 100)  # 100x100 square
+# Try loading clicker image
+click_img = None
+if os.path.exists("pngtree-cookie-clipart-cartoon-clipart-cookie-png-image_2360129.jpg"):
+    click_img = pygame.image.load("pngtree-cookie-clipart-cartoon-clipart-cookie-png-image_2360129.jpg")
+    click_img = pygame.transform.scale(click_img, (100, 100))
+
+# Button rectangles
+click_button = pygame.Rect(WIDTH // 2 - 50, 100, 100, 100)
 if buy_img:
     buy_button = buy_img.get_rect(center=(WIDTH // 2, 225))
 else:
@@ -39,8 +45,11 @@ running = True
 while running:
     screen.fill(WHITE)
 
-    # Draw click square
-    pygame.draw.rect(screen, (200, 100, 100), click_button)  # Reddish square
+    # Draw clicker image or fallback square
+    if click_img:
+        screen.blit(click_img, click_button)
+    else:
+        pygame.draw.rect(screen, (200, 100, 100), click_button)  # Reddish square
 
     # Draw buy button (image or fallback rectangle)
     if buy_img:
