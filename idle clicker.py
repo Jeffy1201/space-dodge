@@ -19,13 +19,13 @@ auto_clicker_cost = 10
 # Try loading buy button image
 buy_img = None
 if os.path.exists("buy_button.png"):
-    buy_img = pygame.image.load("buy_button.png")
+    buy_img = pygame.image.load("buy_button.png").convert_alpha()
     buy_img = pygame.transform.scale(buy_img, (300, 50))
 
-# Try loading clicker image
+# Try loading clicker image with transparency support
 click_img = None
 if os.path.exists("ChatGPT Image Apr 7, 2025, 03_09_17 PM.png"):
-    click_img = pygame.image.load("ChatGPT Image Apr 7, 2025, 03_09_17 PM.png")
+    click_img = pygame.image.load("ChatGPT Image Apr 7, 2025, 03_09_17 PM.png").convert_alpha()
     click_img = pygame.transform.scale(click_img, (100, 100))
 
 # Button rectangles
