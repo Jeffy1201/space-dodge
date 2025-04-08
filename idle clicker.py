@@ -16,7 +16,7 @@ small_font = pygame.font.SysFont("Arial", 18)
 
 coins = 0
 auto_clickers = 0
-auto_clicker_cost = 1  # Reduced base cost
+auto_clicker_cost = 10  # Reduced base cost
 fullscreen = False
 
 # Load background image if available
@@ -62,8 +62,8 @@ if os.path.exists("pngimg.com - coin_PNG36871.png"):
     coin_img = pygame.transform.scale(coin_img, (24, 24))
 
 # Load background music if available
-if os.path.exists("background_music.mp3"):
-    pygame.mixer.music.load("background_music.mp3")
+if os.path.exists("Sweet(chosic.com).mp3"):
+    pygame.mixer.music.load("Sweet(chosic.com).mp3")
     pygame.mixer.music.play(-1)  # Play the music in a loop
 
 # Button rectangles (positioning buttons at the bottom)
