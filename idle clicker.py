@@ -16,7 +16,7 @@ small_font = pygame.font.SysFont("Arial", 18)
 
 coins = 0
 auto_clickers = 0
-auto_clicker_cost = 10  # Reduced base cost
+auto_clicker_cost = 1  # Reduced base cost
 fullscreen = False
 
 # Load background image if available
