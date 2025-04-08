@@ -17,11 +17,11 @@ font = pygame.font.SysFont("Arial", 24)
 small_font = pygame.font.SysFont("Arial", 18)
 
 coins = 0
-auto_clickers = [0, 0, 0, 0]  # Four levels of auto-clickers, including Super Auto Clicker
-auto_clicker_base_costs = [10, 100, 1000, 10000]  # Base costs for each level, including Super Auto Clicker
+auto_clickers = [0, 0, 0]  # Three levels of auto-clickers
+auto_clicker_base_costs = [10, 100, 1000]  # Base costs for each level
 auto_clicker_costs = auto_clicker_base_costs.copy()
-auto_clicker_efficiencies = [1, 5, 20, 60]  # Efficiency for each level, including Super Auto Clicker
-auto_clicker_upgrades = [0, 0, 0, 0]  # Upgrade levels for each auto-clicker type, including Super Auto Clicker
+auto_clicker_efficiencies = [1, 5, 20]  # Efficiency for each level
+auto_clicker_upgrades = [0, 0, 0]  # Upgrade levels for each auto-clicker type
 fullscreen = False
 
 # Load background image if available
@@ -53,12 +53,6 @@ auto_clicker_icon = None
 if os.path.exists("left-click.png"):
     auto_clicker_icon = pygame.image.load("left-click.png").convert_alpha()
     auto_clicker_icon = pygame.transform.scale(auto_clicker_icon, (24, 24))
-
-# Load super auto-clicker icon image
-super_auto_clicker_icon = None
-if os.path.exists("super_click.png"):
-    super_auto_clicker_icon = pygame.image.load("super_click.png").convert_alpha()
-    super_auto_clicker_icon = pygame.transform.scale(super_auto_clicker_icon, (24, 24))
 
 # Try loading clicker image with transparency support
 click_img = None
@@ -98,7 +92,7 @@ menu_x = WIDTH
 
 # Achievements
 achievements = []
-all_achievements = ["Rich Player", "Auto Clicker Master", "Super Auto Clicker Master"]
+all_achievements = ["Rich Player", "Auto Clicker Master"]
 
 # Save and load functionality
 def save_game():
@@ -118,9 +112,9 @@ def load_game():
         with open("save_game.json", "r") as save_file:
             game_state = json.load(save_file)
             coins = game_state.get("coins", 0)
-            auto_clickers = game_state.get("auto_clickers", [0, 0, 0, 0])
+            auto_clickers = game_state.get("auto_clickers", [0, 0, 0])
             auto_clicker_costs = game_state.get("auto_clicker_costs", auto_clicker_base_costs.copy())
-            auto_clicker_upgrades = game_state.get("auto_clicker_upgrades", [0, 0, 0, 0])
+            auto_clicker_upgrades = game_state.get("auto_clicker_upgrades", [0, 0, 0])
             achievements = game_state.get("achievements", [])
 
 load_game()
@@ -128,9 +122,9 @@ load_game()
 def reset_game():
     global coins, auto_clickers, auto_clicker_costs, auto_clicker_upgrades, achievements
     coins = 0
-    auto_clickers = [0, 0, 0, 0]
+    auto_clickers = [0, 0, 0]
     auto_clicker_costs = auto_clicker_base_costs.copy()
-    auto_clicker_upgrades = [0, 0, 0, 0]
+    auto_clicker_upgrades = [0, 0, 0]
     achievements = []
 
 clock = pygame.time.Clock()
@@ -154,14 +148,12 @@ def check_achievements():
     global achievements
     if coins >= 1000 and "Rich Player" not in achievements:
         achievements.append("Rich Player")
-    if sum(auto_clickers[:3]) >= 50 and "Auto Clicker Master" not in achievements:
+    if sum(auto_clickers) >= 50 and "Auto Clicker Master" not in achievements:
         achievements.append("Auto Clicker Master")
-    if auto_clickers[3] >= 10 and "Super Auto Clicker Master" not in achievements:
-        achievements.append("Super Auto Clicker Master")
 
 def upgrade_auto_clickers():
     global coins
-    for level in range(4):
+    for level in range(3):
         upgrade_cost = auto_clicker_base_costs[level] * (auto_clicker_upgrades[level] + 1)
         print(f"Level {level}, Upgrade Cost: {upgrade_cost}, Coins: {coins}, Upgrades: {auto_clicker_upgrades[level]}")  # Debug print
         if coins >= upgrade_cost:
@@ -197,7 +189,7 @@ while running:
         screen.blit(coin_text, (20, 20))
 
     # Draw the auto-clicker price and count
-    for level in range(4):
+    for level in range(3):
         auto_clicker_text = font.render(f"Auto Clickers L{level+1}: {auto_clickers[level]}", True, BLACK)
         screen.blit(auto_clicker_text, (20, HEIGHT - 333 + level * 20))
         auto_clicker_cost_text = font.render(f"Cost: {auto_clicker_costs[level]}", True, BLACK)
@@ -232,10 +224,6 @@ while running:
     # Draw auto-clicker icon
     if auto_clicker_icon:
         screen.blit(auto_clicker_icon, (buy_button.right + 10, buy_button.centery - auto_clicker_icon.get_height() // 2))
-
-    # Draw super auto-clicker icon
-    if super_auto_clicker_icon:
-        screen.blit(super_auto_clicker_icon, (buy_button.right + 10, buy_button.centery - super_auto_clicker_icon.get_height() // 2))
 
     if show_buy_options:
         # Draw text for buying different amounts and their costs
@@ -282,7 +270,7 @@ while running:
             elif buy_button.collidepoint(event.pos):
                 show_buy_options = not show_buy_options
             elif sell_button.collidepoint(event.pos):
-                for level in range(4):
+                for level in range(3):
                     if auto_clickers[level] > 0:
                         auto_clickers[level] -= 1
                         coins += calculate_sell_price(level)
@@ -295,7 +283,7 @@ while running:
             elif upgrade_button.collidepoint(event.pos):
                 upgrade_auto_clickers()
             elif show_buy_options:
-                for level in range(4):
+                for level in range(3):
                     if buy_1_button.collidepoint(event.pos):
                         if coins >= calculate_cost(level, 1):
                             coins -= calculate_cost(level, 1)
@@ -331,7 +319,7 @@ while running:
                     screen = pygame.display.set_mode((WIDTH, HEIGHT))
 
         elif event.type == PASSIVE_EVENT:
-            for level in range(4):
+            for level in range(3):
                 coins += auto_clickers[level] * auto_clicker_efficiencies[level] * (auto_clicker_upgrades[level] + 1)  # Add coins based on the number of auto-clickers and their efficiency
             check_achievements()  # Check for achievements
             special_ability()  # Trigger special ability
@@ -340,3 +328,7 @@ while running:
 
 pygame.quit()
 sys.exit()
+
+# Current Date and Time (UTC - YYYY-MM-DD HH:MM:SS formatted): 2025-04-08 10:33:31
+# Current User's Login: Jeffy1201
+# Current User's Computer Name: Jeffy1201
