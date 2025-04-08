@@ -16,7 +16,7 @@ small_font = pygame.font.SysFont("Arial", 18)
 
 coins = 0
 auto_clickers = 0
-auto_clicker_cost = 1  # Reduced base cost
+auto_clicker_cost = 10  # Reduced base cost
 fullscreen = False
 
 # Load background image if available
@@ -37,6 +37,18 @@ if os.path.exists("28d551717ba939a65dbc6946b50da3f5.png"):
     menu_img = pygame.image.load("28d551717ba939a65dbc6946b50da3f5.png").convert_alpha()
     menu_img = pygame.transform.scale(menu_img, (40, 40))
 
+# Load clicker icon image
+clicker_icon = None
+if os.path.exists("cursor.png"):
+    clicker_icon = pygame.image.load("cursor.png").convert_alpha()
+    clicker_icon = pygame.transform.scale(clicker_icon, (24, 24))
+
+# Load auto-clicker icon image
+auto_clicker_icon = None
+if os.path.exists("left-click.png"):
+    auto_clicker_icon = pygame.image.load("left-click.png").convert_alpha()
+    auto_clicker_icon = pygame.transform.scale(auto_clicker_icon, (24, 24))
+
 # Try loading clicker image with transparency support
 click_img = None
 if os.path.exists("clicker.png"):
@@ -50,8 +62,8 @@ if os.path.exists("pngimg.com - coin_PNG36871.png"):
     coin_img = pygame.transform.scale(coin_img, (24, 24))
 
 # Load background music if available
-if os.path.exists("Sweet(chosic.com).mp3"):
-    pygame.mixer.music.load("Sweet(chosic.com).mp3")
+if os.path.exists("background_music.mp3"):
+    pygame.mixer.music.load("background_music.mp3")
     pygame.mixer.music.play(-1)  # Play the music in a loop
 
 # Button rectangles (positioning buttons at the bottom)
@@ -129,6 +141,14 @@ while running:
     sell_text = font.render("Sell", True, BLACK)
     screen.blit(sell_text, (sell_button.centerx - sell_text.get_width() // 2, sell_button.centery - sell_text.get_height() // 2))
 
+    # Draw clicker icon
+    if clicker_icon:
+        screen.blit(clicker_icon, (click_button.right + 10, click_button.centery - clicker_icon.get_height() // 2))
+
+    # Draw auto-clicker icon
+    if auto_clicker_icon:
+        screen.blit(auto_clicker_icon, (buy_button.right + 10, buy_button.centery - auto_clicker_icon.get_height() // 2))
+
     if show_buy_options:
         # Draw text for buying different amounts and their costs
         buy_1_text = small_font.render(f"1 ({calculate_cost(1)} coins)", True, BLACK)
@@ -175,26 +195,26 @@ while running:
                     if coins >= calculate_cost(1):
                         coins -= calculate_cost(1)
                         auto_clickers += 1
-                        auto_clicker_cost = int(auto_clicker_cost * 1.1)  # Reduced cost increment factor
+                        auto_clicker_cost = int(auto_clicker_cost * 1.2)  # Reduced cost increment factor
                 elif buy_5_button.collidepoint(event.pos):
                     if coins >= calculate_cost(5):
                         coins -= calculate_cost(5)
                         auto_clickers += 5
                         for _ in range(5):
-                            auto_clicker_cost = int(auto_clicker_cost * 1.1)  # Reduced cost increment factor
+                            auto_clicker_cost = int(auto_clicker_cost * 1.2)  # Reduced cost increment factor
                 elif buy_10_button.collidepoint(event.pos):
                     if coins >= calculate_cost(10):
                         coins -= calculate_cost(10)
                         auto_clickers += 10
                         for _ in range(10):
-                            auto_clicker_cost = int(auto_clicker_cost * 1.1)  # Reduced cost increment factor
+                            auto_clicker_cost = int(auto_clicker_cost * 1.2)  # Reduced cost increment factor
                 elif buy_max_button.collidepoint(event.pos):
                     max_clickers = 0
                     while coins >= auto_clicker_cost:
                         coins -= auto_clicker_cost
                         auto_clickers += 1
                         max_clickers += 1
-                        auto_clicker_cost = int(auto_clicker_cost * 1.1)  # Reduced cost increment factor
+                        auto_clicker_cost = int(auto_clicker_cost * 1.2)  # Reduced cost increment factor
                     buy_max_cost = calculate_cost(max_clickers)
 
         elif event.type == pygame.KEYDOWN:
