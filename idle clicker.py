@@ -82,7 +82,7 @@ buy_max_button = pygame.Rect(WIDTH // 2 - 160, HEIGHT - 280, 100, 50)
 
 show_buy_options = False
 show_menu = False
-menu_width = WIDTH // 2  # Set menu width to half of the screen width
+menu_width = WIDTH // 3
 menu_x = WIDTH
 
 # Upgrade system variables
