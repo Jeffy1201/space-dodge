@@ -1,6 +1,7 @@
 import pygame
 import sys
 import os
+import json
 
 pygame.init()
 
@@ -71,6 +72,7 @@ click_button = pygame.Rect(WIDTH // 2 - 50, HEIGHT - 180, 100, 50)  # Proper hei
 buy_button = pygame.Rect(WIDTH // 2 - 50, HEIGHT - 100, 100, 50)    # Proper height for buy button
 sell_button = pygame.Rect(WIDTH // 2 - 50, HEIGHT - 40, 100, 50)    # Button for selling auto-clickers
 menu_button = pygame.Rect(WIDTH - 50, 10, 40, 40)                   # Menu button in the top right corner
+restart_button = pygame.Rect(WIDTH // 2 - 50, HEIGHT - 240, 100, 50) # Restart button just above the click button
 
 # Buttons for buying different amounts
 buy_1_button = pygame.Rect(WIDTH // 2 - 160, HEIGHT - 100, 100, 50)
@@ -80,8 +82,49 @@ buy_max_button = pygame.Rect(WIDTH // 2 - 160, HEIGHT - 280, 100, 50)
 
 show_buy_options = False
 show_menu = False
-menu_width = WIDTH // 3
+menu_width = WIDTH // 2  # Set menu width to half of the screen width
 menu_x = WIDTH
+
+# Upgrade system variables
+upgrade_cost = 50
+upgrade_level = 0
+
+# Achievements
+achievements = []
+all_achievements = ["Rich Player", "Auto Clicker Master"]
+
+# Save and load functionality
+def save_game():
+    game_state = {
+        "coins": coins,
+        "auto_clickers": auto_clickers,
+        "auto_clicker_cost": auto_clicker_cost,
+        "upgrade_level": upgrade_level,
+        "achievements": achievements
+    }
+    with open("save_game.json", "w") as save_file:
+        json.dump(game_state, save_file)
+
+def load_game():
+    global coins, auto_clickers, auto_clicker_cost, upgrade_level, achievements
+    if os.path.exists("save_game.json"):
+        with open("save_game.json", "r") as save_file:
+            game_state = json.load(save_file)
+            coins = game_state.get("coins", 0)
+            auto_clickers = game_state.get("auto_clickers", 0)
+            auto_clicker_cost = game_state.get("auto_clicker_cost", 10)
+            upgrade_level = game_state.get("upgrade_level", 0)
+            achievements = game_state.get("achievements", [])
+
+load_game()
+
+def reset_game():
+    global coins, auto_clickers, auto_clicker_cost, upgrade_level, achievements
+    coins = 0
+    auto_clickers = 0
+    auto_clicker_cost = 10
+    upgrade_level = 0
+    achievements = []
 
 clock = pygame.time.Clock()
 
@@ -99,6 +142,13 @@ def calculate_cost(quantity):
 
 def calculate_sell_price():
     return auto_clicker_cost // 2  # Selling auto-clickers at half the current purchase cost
+
+def check_achievements():
+    global achievements
+    if coins >= 1000 and "Rich Player" not in achievements:
+        achievements.append("Rich Player")
+    if auto_clickers >= 50 and "Auto Clicker Master" not in achievements:
+        achievements.append("Auto Clicker Master")
 
 running = True
 while running:
@@ -141,6 +191,10 @@ while running:
     sell_text = font.render("Sell", True, BLACK)
     screen.blit(sell_text, (sell_button.centerx - sell_text.get_width() // 2, sell_button.centery - sell_text.get_height() // 2))
 
+    # Draw restart button
+    restart_text = font.render("Restart", True, BLACK)
+    screen.blit(restart_text, (restart_button.centerx - restart_text.get_width() // 2, restart_button.centery - restart_text.get_height() // 2))
+
     # Draw clicker icon
     if clicker_icon:
         screen.blit(clicker_icon, (click_button.right + 10, click_button.centery - clicker_icon.get_height() // 2))
@@ -171,10 +225,21 @@ while running:
         
         pygame.draw.rect(screen, WHITE, pygame.Rect(menu_x, 0, menu_width, HEIGHT))  # Draw the menu
 
+        # Display achievements
+        achievement_y = 50
+        for achievement in all_achievements:
+            if achievement in achievements:
+                achievement_text = small_font.render(f"{achievement} - Achieved", True, BLACK)
+            else:
+                achievement_text = small_font.render(f"{achievement} - Not Achieved", True, BLACK)
+            screen.blit(achievement_text, (menu_x + 10, achievement_y))
+            achievement_y += 30
+
     pygame.display.flip()
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
+            save_game()
             running = False
 
         elif event.type == pygame.MOUSEBUTTONDOWN:
@@ -190,6 +255,8 @@ while running:
                 show_menu = not show_menu  # Toggle the menu
                 if not show_menu:
                     menu_x = WIDTH  # Reset menu position if closed
+            elif restart_button.collidepoint(event.pos):
+                reset_game()
             elif show_buy_options:
                 if buy_1_button.collidepoint(event.pos):
                     if coins >= calculate_cost(1):
@@ -227,6 +294,7 @@ while running:
 
         elif event.type == PASSIVE_EVENT:
             coins += auto_clickers  # Add coins based on the number of auto-clickers
+            check_achievements()  # Check for achievements
 
     clock.tick(60)
 
