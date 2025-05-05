@@ -5,11 +5,12 @@ YouAreGoodBoyorgirl = "Good Boy/Girl"
 Hi = "Hello"
 Speaking = "So Now that you do what I say ill say Press enter"
 Hehe = "..."
-why = "why dont you become my living chair if you keep doing what i say"
+why = "why dont you become a living person if you keep doing what i say"
 whY = "it's pontless to do anything else,"
-wHY = "if you did you would become dead"
-Why = "Mabey I could just sell you to make some money off of you"
-pointless = "you pointless person."
+wHY = "if you did you would become a person and then ill be affended"
+Why = "Mabey I could just sell a piece of wood for you to make some money off"
+pointless = "you pointless wood."
+wood = "dosent even give me good money..."
 
 print (Hi)
 print (Listening)
@@ -29,3 +30,4 @@ print (Why)
 print (pointless)
 print (Press)
 input()
+print (wood)
