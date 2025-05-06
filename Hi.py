@@ -11,6 +11,7 @@ wHY = "if you did you would become a person and then ill be affended"
 Why = "Mabey I could just sell a piece of wood for you to make some money off"
 pointless = "you pointless wood."
 wood = "dosent even give me good money..."
+drill = "you know the drill"
 
 print (Hi)
 print (Listening)
@@ -28,6 +29,6 @@ print (Press)
 input()
 print (Why)
 print (pointless)
-print (Press)
+print (drill)
 input()
 print (wood)
